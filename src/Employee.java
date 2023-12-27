@@ -10,7 +10,7 @@ public class Employee {
     private static int counter;
 
     public Employee(String surname, String name, String middleName, int departments, double salary) {
-        if (departments <= 0 || departments > 5) throw new IllegalArgumentException ("Введено невалидное значение department");
+        if (departments <= 0 || departments > 5) throw new IllegalArgumentException ("Введено невалидное значение departments");
         this.surname = surname;
         this.name = name;
         this.middleName = middleName;

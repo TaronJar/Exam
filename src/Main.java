@@ -2,10 +2,11 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Main {
+
     private static Employee[] employees = new Employee[10];
 
     public static void main(String[] args) {
-        System.out.println("Базовая сложность:");
+        System.out.println("Базовая сложность + Повышенная сложность");
         System.out.println();
 
         employees[0] = new Employee("Максимов", "Максим", "Максимович", 1, 100);
@@ -20,11 +21,189 @@ public class Main {
         employees[9] = new Employee("Владислав", "Димитрий", "Петрович", 2, 1000);
         all();
         System.out.println();
-        System.out.println("1." + "Сумма зарплат в месяц: " + getSumSalaryPerMonth());
-        System.out.println("2." + "Минимальная зп сотрудника: " + getMinSalary());
-        System.out.println("3." + "Максимальная зп сотрудника: " + getMaxSalary());
-        System.out.println("4." + "Среднаяя зп сотрудника: " + getAverageSalary());
+        //Базовая сложность
+        System.out.println("Сумма зарплат в месяц: " + getSumSalaryPerMonth());
+        System.out.println("Минимальная зп сотрудника: " + getMinSalary());
+        System.out.println("Максимальная зп сотрудника: " + getMaxSalary());
+        System.out.println("Среднаяя зп сотрудника: " + getAverageSalary());
+        //Повышенная сложность
+        // Задание 1.
+        System.out.println(" ");
+        getIndexSalary();
+        System.out.println(" ");
+        System.out.println(" ");
+        //Повышенная сложность
+        // Задание 2. (a)
+        int departmentNumber = 3;
+        System.out.println(" ");
+        getEmployeeWithMinSalary(departmentNumber);
+// Задание 2. b.
+        System.out.println(" ");
+        System.out.println("Сотрудник с максимальной зарплатой в отделе № "+ departmentNumber +" - " + getMaxDepartmentSalary(2));
+        System.out.println(" ");
+        // Задание 2. c.
+        System.out.printf("Сумма затрат на зарплаты в месяц: в отделе № " + departmentNumber + " - %.2f рублей.", getSumSalaryDepartmentPerMonth(departmentNumber));
+        System.out.println(" ");
+        System.out.println(" ");
+        // Задание 2. d.
+        System.out.printf("Среднее значение зарплат: в отделе № " + departmentNumber +" - %.2f рублей.", getAverageSalaryDepartment(departmentNumber));
+        System.out.println(" ");
+        System.out.println(" ");
+        // Задание 2. e.
+        getIndexSalaryDepartment(departmentNumber);
+        System.out.println(" ");
+        System.out.println(" ");
+        // Задание 3 a.
+        double EmployeesSalary = 30000.00d;
+        getAllEmployeesSalaryMin(EmployeesSalary);
+        System.out.println(" ");
+        // Задание 3 б.
+        getAllEmployeesSalaryMax(EmployeesSalary);
     }
+    //Повышенная сложность.
+    public static void getAllEmployeesSalaryMax(double EmployeesSalary) {
+        for (Employee employee : employees) {
+            if (employee != null && employee.getSalary() >= EmployeesSalary) {
+                System.out.println("Информация о сотруднике: (Уникальный идентификатор = " + employee.getId() + ", " + employee.getPullName() + ", З/П в месяц: " + employee.getSalary() + ')');
+            }
+        }
+    }
+
+    //Повышенная сложность.
+    public static void getAllEmployeesSalaryMin(double EmployeesSalary) {
+        for (Employee employee : employees) {
+            if (employee != null && employee.getSalary() < EmployeesSalary) {
+                System.out.println("Информация о сотруднике: (Уникальный идентификатор = " + employee.getId() + ", " + employee.getPullName() + ", З/П в месяц: " + employee.getSalary() + ')');
+            }
+        }
+    }
+
+    //Повышенная сложность.
+    public static void getAllEmployeesDepartment(int departmentNumber) {
+        for (Employee employee : employees) {
+            if (employee != null && employee.getDepartments() == departmentNumber) {
+                System.out.println("Информация о сотруднике: (Уникальный идентификатор = " + employee.getId() + ", " + employee.getPullName() + ", З/П в месяц: " + employee.getSalary() + ')');
+            }
+        }
+    }
+    //Повышенная сложность.
+    public static void getIndexSalaryDepartment(int departmentNumber) {
+        for (Employee employee : employees) {
+            if (employee != null && employee.getDepartments() == departmentNumber) {
+                employee.setSalary(employee.getSalary() + employee.getSalary() * departmentNumber / 100);
+                System.out.printf("%.2f  ", employee.getSalary());
+            }
+        }
+    }
+    // a. Сотрудник с минимальной зарплатой в отделе
+    private static void getEmployeeWithMinSalary(int department) {
+        Employee minSalaryEmployee = null;
+        double minSalary = Double.MAX_VALUE;
+        for (Employee employee : employees) {
+            if (employee.getDepartments() == department && employee.getSalary() < minSalary) {
+                minSalary = employee.getSalary();
+                minSalaryEmployee = employee;
+            }
+        }
+        if (minSalaryEmployee != null) {
+            System.out.println("Сотрудник с минимальной зарплатой в отделе " + department + ":");
+            System.out.println(minSalaryEmployee);
+        } else {
+            System.out.println("В отделе " + department + " нет сотрудников.");
+        }
+    }
+    //Повышенная сложность.
+    public static double getAverageSalaryDepartment(int departmentNumber) {
+        double sum = 0;
+        int countEmp = 0;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] == null) continue;
+            if (employees[i].getDepartments() == departmentNumber) {
+                countEmp++;
+                sum += employees[i].getSalary();
+            }
+        }
+        return sum / countEmp;
+    }
+    //Повышенная сложность.
+    public static double getSumSalaryDepartmentPerMonth(int departmentNumber) {
+        double sum = 0;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] == null) continue;
+            if (employees[i].getDepartments() == departmentNumber) {
+                sum += employees[i].getSalary();
+            }
+        }
+        return sum;
+    }
+    //Повышенная сложность
+    public static void getIndexSalary() {
+        double arg = 10;
+        for (Employee employee : employees) {
+            if (employee != null) {
+                employee.setSalary(employee.getSalary() + employee.getSalary() * arg / 100);
+                System.out.printf(" %.2f  ", employee.getSalary());
+
+            }
+        }
+
+    }
+    public static void getAllEmployees() {
+        if (employees != null) {
+            for (Employee employee : employees) {
+                System.out.println(employee);
+            }
+        }
+    }
+
+    //Повышенная сложность.
+    public static Employee getMinDepartmentSalary(int departmentNumber) {
+        double min = 0;
+        int index = 0;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null) {
+                min = employees[i].getSalary();
+                index = i;
+                break;
+            }
+        }
+
+        Employee minSalary = employees[index];
+        for (int i = index; i < employees.length; i++) {
+            if (employees[i] == null) continue;
+            if (employees[i].getSalary() < min && employees[i].getDepartments() == departmentNumber) {
+                min = employees[i].getSalary();
+                minSalary = employees[i];
+            }
+        }
+        return minSalary;
+    }
+
+    //Повышенная сложность.
+    public static Employee getMaxDepartmentSalary(int departmentNumber) {
+        double max = 0;
+        int index = 0;
+        Employee maxSalary = null;
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null) {
+                max = employees[i].getSalary();
+                maxSalary = employees[i];
+                index = i;
+                break;
+            }
+        }
+
+
+        for (int i = index; i < employees.length; i++) {
+            if (employees[i] == null) continue;
+            if (employees[i].getSalary() > max && employees[i].getDepartments() == departmentNumber) {
+                max = employees[i].getSalary();
+                maxSalary = employees[i];
+            }
+        }
+        return maxSalary;
+    }
+
 
     public static void all() {
         for (Employee emp : employees) {
@@ -113,3 +292,5 @@ public class Main {
     }
 
 }
+
+
